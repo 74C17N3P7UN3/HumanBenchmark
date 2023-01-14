@@ -1,2 +1,8 @@
+# Byte-compiled
+__pycache__
+
+# Personal files
+assets/*.my
+
 # PyCharm project
 .idea
