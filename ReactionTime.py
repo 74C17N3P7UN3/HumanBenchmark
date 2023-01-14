@@ -1,3 +1,7 @@
+__author__ = "74C17N3P7UN3"
+__version__ = "v2.1.0"
+__updated__ = "14/01/2023"
+
 from time import sleep
 
 import customtkinter as ctk
@@ -30,47 +34,64 @@ class ReactionTime:
                                     fg_color=("#3A7EBF", "#1F538D"), hover=False)
         self.button.pack(pady=12, padx=10)
 
-        # Index of the current displayed phase
-        self.phase = 1
+        # Current phase
+        self.phase = [1, False]
 
         # Program variables
-        self.position = (0, 0)
-        self.color = (0, 0, 0)
+        self.position = [0, 0]
+        self.color = [0, 0, 0]
 
         self.clicks = 0
 
     def main(self):
         while True:
-            if self.phase == 1:
-                self.title.configure(text="ReactionTime")
-                self.description.configure(text="Put this window on top\n"
-                                                "and place it out of the way")
-                self.button.configure(text=f"Done! (1/4)", command=self.next_phase)
-            elif self.phase == 2:
+            if self.phase[0] == 1:
+                # Phase initialization
+                if not self.phase[1]:
+                    self.title.configure(text="ReactionTime")
+                    self.description.configure(text="Put this window on top\n"
+                                                    "and place it out of the way")
+                    self.button.configure(text=f"Done! (1/4)", command=self.next_phase)
+                    self.phase[1] = True
+            elif self.phase[0] == 2:
+                # Phase initialization
+                if not self.phase[1]:
+                    self.title.configure(text="Calibration")
+                    self.description.configure(text="Wait for the green and place the cursor\n"
+                                                    "on a green pixel, then hit the 'n' key")
+                    self.phase[1] = True
+                # Phase loop
                 self.position = (gui.position().x, gui.position().y)
                 self.color = gui.pixel(self.position[0], self.position[1])
-
-                self.title.configure(text="Calibration")
-                self.description.configure(text="Wait for the green and place the cursor\n"
-                                                "on a green pixel, then hit the 'c' key")
                 self.button.configure(text=f"{self.position}", command=None)
 
-                if keyboard.is_pressed("c"):
+                if keyboard.is_pressed("n"):
                     self.next_phase()
-            elif self.phase == 3:
-                self.button.configure(text=f"Done! (2/4)", command=self.next_phase, fg_color=("#2CC985", "#2FA572"))
-            elif self.phase == 4:
-                self.title.configure(text="Preparation")
-                self.description.configure(text="Refresh the page and click the\n"
-                                                "button below to start the execution")
-                self.button.configure(text="Execute (3/4)", command=self.next_phase, fg_color=("#3A7EBF", "#1F538D"))
-            elif self.phase == 5:
-                self.title.configure(text="Executing")
+            elif self.phase[0] == 3:
+                # Phase initialization
+                if not self.phase[1]:
+                    self.button.configure(text=f"Done! (2/4)", command=self.next_phase, fg_color=("#2CC985", "#2FA572"))
+                    self.phase[1] = True
+            elif self.phase[0] == 4:
+                # Phase initialization
+                if not self.phase[1]:
+                    self.title.configure(text="Preparation")
+                    self.description.configure(text="Refresh the page and click the\n"
+                                                    "button below to start the execution")
+                    self.button.configure(text="Execute (3/4)", command=self.next_phase,
+                                          fg_color=("#3A7EBF", "#1F538D"))
+                    self.phase[1] = True
+            elif self.phase[0] == 5:
+                # Phase initialization
+                if not self.phase[1]:
+                    self.title.configure(text="Executing")
+                    self.button.configure(text="Done! (4/4)", command=self.next_phase, state="disabled")
+                    self.phase[1] = True
+                # Phase loop
                 if self.clicks == 0:
                     self.description.configure(text="Please start the test")
                 else:
                     self.description.configure(text=f"({self.clicks}/5) Clicks")
-                self.button.configure(text="Done! (4/4)", command=self.next_phase, state="disabled")
 
                 self.function()
             else:
@@ -91,7 +112,7 @@ class ReactionTime:
             self.button.configure(state="enabled", require_redraw=True)
 
     def next_phase(self):
-        self.phase += 1
+        self.phase = [self.phase[0] + 1, False]
 
     @staticmethod
     def click(x: int, y: int):
@@ -100,7 +121,14 @@ class ReactionTime:
         sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
 
+    @staticmethod
+    def info():
+        print(f"Author: {__author__}")
+        print(f"Version: {__version__}")
+        print(f"Updated: {__updated__}")
+
 
 if __name__ == "__main__":
     Program = ReactionTime()
+    Program.info()
     Program.main()
