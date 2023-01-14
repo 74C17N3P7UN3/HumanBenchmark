@@ -1,5 +1,5 @@
 __author__ = "74C17N3P7UN3"
-__version__ = "v2.1.0"
+__version__ = "v2.1.1"
 __updated__ = "14/01/2023"
 
 from time import sleep
@@ -27,12 +27,9 @@ class ReactionTime:
         self.frame.pack(pady=20, padx=40, fill="both")
 
         self.title = ctk.CTkLabel(master=self.frame, font=("Roboto", 24, "bold"))
-        self.title.pack(pady=24, padx=20)
         self.description = ctk.CTkLabel(master=self.frame)
-        self.description.pack(pady=12, padx=10)
         self.button = ctk.CTkButton(master=self.frame, command=lambda: None,
                                     fg_color=("#3A7EBF", "#1F538D"), hover=False)
-        self.button.pack(pady=12, padx=10)
 
         # Current phase
         self.phase = [1, False]
@@ -49,9 +46,13 @@ class ReactionTime:
                 # Phase initialization
                 if not self.phase[1]:
                     self.title.configure(text="ReactionTime")
+                    self.title.pack(pady=24, padx=20)
                     self.description.configure(text="Put this window on top\n"
                                                     "and place it out of the way")
+                    self.description.pack(pady=12, padx=10)
                     self.button.configure(text=f"Done! (1/4)", command=self.next_phase)
+                    self.button.pack(pady=12, padx=10)
+
                     self.phase[1] = True
             elif self.phase[0] == 2:
                 # Phase initialization
@@ -59,6 +60,7 @@ class ReactionTime:
                     self.title.configure(text="Calibration")
                     self.description.configure(text="Wait for the green and place the cursor\n"
                                                     "on a green pixel, then hit the 'n' key")
+
                     self.phase[1] = True
                 # Phase loop
                 self.position = (gui.position().x, gui.position().y)
@@ -80,12 +82,14 @@ class ReactionTime:
                                                     "button below to start the execution")
                     self.button.configure(text="Execute (3/4)", command=self.next_phase,
                                           fg_color=("#3A7EBF", "#1F538D"))
+
                     self.phase[1] = True
             elif self.phase[0] == 5:
                 # Phase initialization
                 if not self.phase[1]:
                     self.title.configure(text="Executing")
                     self.button.configure(text="Done! (4/4)", command=self.next_phase, state="disabled")
+
                     self.phase[1] = True
                 # Phase loop
                 if self.clicks == 0:
