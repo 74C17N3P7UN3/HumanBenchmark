@@ -7,7 +7,7 @@ import win32api
 import win32con
 
 
-class ReactionTest:
+class ReactionTime:
     def __init__(self):
         # Set the default UI theme
         ctk.set_appearance_mode("dark")
@@ -15,7 +15,7 @@ class ReactionTest:
 
         # Create the root element of the UI
         self.root = ctk.CTk()
-        self.root.title("ReactionTest")
+        self.root.title("ReactionTime")
         self.root.geometry("360x225")
 
         # Construct the UI widgets
@@ -42,7 +42,7 @@ class ReactionTest:
     def main(self):
         while True:
             if self.phase == 1:
-                self.title.configure(text="ReactionTest")
+                self.title.configure(text="ReactionTime")
                 self.description.configure(text="Put this window on top\n"
                                                 "and place it out of the way")
                 self.button.configure(text=f"Done! (1/4)", command=self.next_phase)
@@ -102,5 +102,5 @@ class ReactionTest:
 
 
 if __name__ == "__main__":
-    ReactionTest = ReactionTest()
-    ReactionTest.main()
+    Program = ReactionTime()
+    Program.main()
