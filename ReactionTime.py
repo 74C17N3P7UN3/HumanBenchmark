@@ -1,6 +1,6 @@
 __author__ = "74C17N3P7UN3"
-__version__ = "v2.1.1"
-__updated__ = "14/01/2023"
+__version__ = "v2.1.2"
+__updated__ = "16/01/2023"
 
 from time import sleep
 
@@ -28,7 +28,7 @@ class ReactionTime:
 
         self.title = ctk.CTkLabel(master=self.frame, font=("Roboto", 24, "bold"))
         self.description = ctk.CTkLabel(master=self.frame)
-        self.button = ctk.CTkButton(master=self.frame, command=lambda: None,
+        self.button = ctk.CTkButton(master=self.frame, command=None,
                                     fg_color=("#3A7EBF", "#1F538D"), hover=False)
 
         # Current phase
@@ -60,26 +60,29 @@ class ReactionTime:
                     self.title.configure(text="Calibration")
                     self.description.configure(text="Wait for the green and place the cursor\n"
                                                     "on a green pixel, then hit the 'n' key")
+                    self.button.configure(command=None)
 
                     self.phase[1] = True
                 # Phase loop
                 self.position = (gui.position().x, gui.position().y)
                 self.color = gui.pixel(self.position[0], self.position[1])
-                self.button.configure(text=f"{self.position}", command=None)
+                self.button.configure(text=f"{self.position}")
 
                 if keyboard.is_pressed("n"):
                     self.next_phase()
             elif self.phase[0] == 3:
                 # Phase initialization
                 if not self.phase[1]:
-                    self.button.configure(text=f"Done! (2/4)", command=self.next_phase, fg_color=("#2CC985", "#2FA572"))
+                    self.button.configure(text=f"Done! (2/4)", command=self.next_phase,
+                                          fg_color=("#2CC985", "#2FA572"))
+
                     self.phase[1] = True
             elif self.phase[0] == 4:
                 # Phase initialization
                 if not self.phase[1]:
                     self.title.configure(text="Preparation")
-                    self.description.configure(text="Refresh the page and click the\n"
-                                                    "button below to start the execution")
+                    self.description.configure(text="Refresh the page, click the button\n"
+                                                    "below and manually start the test")
                     self.button.configure(text="Execute (3/4)", command=self.next_phase,
                                           fg_color=("#3A7EBF", "#1F538D"))
 
@@ -92,11 +95,7 @@ class ReactionTime:
 
                     self.phase[1] = True
                 # Phase loop
-                if self.clicks == 0:
-                    self.description.configure(text="Please start the test")
-                else:
-                    self.description.configure(text=f"({self.clicks}/5) Clicks")
-
+                self.description.configure(text=f"({self.clicks}/5) Clicks")
                 self.function()
             else:
                 exit()
@@ -106,14 +105,14 @@ class ReactionTime:
             self.root.update()
 
     def function(self):
-        if gui.pixel(self.position[0], self.position[1]) == self.color:
+        if gui.pixel(self.position[0], self.position[1]) == self.color and self.clicks < 5:
             self.clicks += 1
             for _ in range(0, 2):
                 self.click(self.position[0], self.position[1])
                 sleep(0.5)
 
         if self.clicks == 5:
-            self.button.configure(state="enabled", require_redraw=True)
+            self.button.configure(state="enabled")
 
     def next_phase(self):
         self.phase = [self.phase[0] + 1, False]
