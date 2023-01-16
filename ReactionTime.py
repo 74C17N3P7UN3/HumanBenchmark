@@ -1,5 +1,5 @@
 __author__ = "74C17N3P7UN3"
-__version__ = "v2.1.2"
+__version__ = "v2.1.3"
 __updated__ = "16/01/2023"
 
 from time import sleep
@@ -35,8 +35,8 @@ class ReactionTime:
         self.phase = [1, False]
 
         # Program variables
-        self.position = [0, 0]
-        self.color = [0, 0, 0]
+        self.position = (0, 0)
+        self.color = (0, 0, 0)
 
         self.clicks = 0
 
