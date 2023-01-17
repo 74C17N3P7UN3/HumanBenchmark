@@ -1,5 +1,5 @@
 __author__ = "74C17N3P7UN3"
-__version__ = "v2.0.0"
+__version__ = "v2.0.1"
 __updated__ = "16/01/2023"
 
 from time import sleep
@@ -28,7 +28,7 @@ class Typing:
         self.title = ctk.CTkLabel(master=self.frame, font=("Roboto", 24, "bold"))
         self.description = ctk.CTkLabel(master=self.frame)
         self.input = ctk.CTkTextbox(master=self.frame, height=50)
-        self.button = ctk.CTkButton(master=self.frame, command=lambda: None,
+        self.button = ctk.CTkButton(master=self.frame, command=None,
                                     fg_color=("#3A7EBF", "#1F538D"), hover=False)
 
         # Current phase
@@ -78,7 +78,7 @@ class Typing:
                 self.description.configure(text=f"Focus the input box\n"
                                                 f"Starting in {self.seconds}s...")
 
-                self.function()
+                self.countdown()
             elif self.phase[0] == 4:
                 # Phase initialization
                 if not self.phase[1]:
@@ -96,7 +96,7 @@ class Typing:
             self.root.update_idletasks()
             self.root.update()
 
-    def function(self):
+    def countdown(self):
         if self.seconds > 0:
             sleep(1)
             self.seconds -= 1
